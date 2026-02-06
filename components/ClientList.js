@@ -1,4 +1,5 @@
-import { error } from "@/utils";
+import { wait, error } from "@/utils";
+import Link from "next/link";
 
 const ClientList = async ({ search }) => {
   console.log("Search : ", search);
@@ -13,12 +14,14 @@ const ClientList = async ({ search }) => {
   } catch {
     error();
   }
+
+  await wait();
   return (
     <>
       <ul>
         {clients.map((client) => (
-          <li key={client.id} className="bg-amber-100">
-            {client.first_name}
+          <li key={client.id} className="bg-amber-100 mt-2">
+            <Link href={`client/${client.id}`}>{client.first_name}</Link>
           </li>
         ))}
       </ul>
