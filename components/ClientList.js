@@ -1,8 +1,8 @@
-import { wait, error } from "@/utils";
-import Link from "next/link";
+import { error } from "@/utils";
+import ClientItem from "@/components/ClientItem";
+import List from "./ui/List";
 
 const ClientList = async ({ search }) => {
-  console.log("Search : ", search);
   let clients;
   try {
     const response = await fetch(
@@ -11,20 +11,21 @@ const ClientList = async ({ search }) => {
         : `${process.env.NEXT_PUBLIC_SITE_URL}/api/clients/`,
     );
     clients = await response.json();
-  } catch {
-    error();
+  } catch (e) {
+    error(e.message);
   }
 
-  await wait();
   return (
     <>
-      <ul>
-        {clients.map((client) => (
-          <li key={client.id} className="bg-amber-100 mt-2">
-            <Link href={`client/${client.id}`}>{client.first_name}</Link>
-          </li>
-        ))}
-      </ul>
+      {clients.length === 0 ? (
+        <p className="text-center text-lg mt-10">No clients found</p>
+      ) : (
+        <List>
+          {clients.map((client) => (
+            <ClientItem key={client.id} client={client} />
+          ))}
+        </List>
+      )}
     </>
   );
 };

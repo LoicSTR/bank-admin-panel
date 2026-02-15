@@ -1,13 +1,16 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 
 const SearchBar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     const params = new URLSearchParams(searchParams);
-
+    const search = event.target.search.value;
     if (search) {
       params.set("search", search);
     } else {
@@ -17,14 +20,14 @@ const SearchBar = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
+    <form onSubmit={handleSubmit} className="flex gap-2 justify-center">
+      <Input
         type="text"
-        className="border-2"
         name="search"
         defaultValue={searchParams.get("search") || ""}
+        placeholder="Search an user..."
       />
-      <button type="submit">Rechercher</button>
+      <Button type="submit">Search</Button>
     </form>
   );
 };

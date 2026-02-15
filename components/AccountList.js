@@ -1,26 +1,18 @@
-import Link from "next/link";
+import List from "./ui/List";
+import AccountItem from "./AccountItem";
 
-const AccountList = async ({ clientId }) => {
-  let accounts;
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/api/accounts?clientsId=${clientId}`,
-    );
-    accounts = await response.json();
-  } catch {
-    error();
-  }
-
+const AccountList = ({ accounts }) => {
   return (
     <>
-      <ul>
-        {accounts.map((account) => (
-          <li key={account.id} className="bg-amber-100 mt-2">
-            <Link href={`/account/${account.id}`}>{account.name}</Link>
-            <p>{account.balance}</p>
-          </li>
-        ))}
-      </ul>
+      {accounts.length === 0 ? (
+        <p className="text-center text-lg mt-10">No accounts yet</p>
+      ) : (
+        <List>
+          {accounts.map((account) => (
+            <AccountItem key={account.id} account={account} />
+          ))}
+        </List>
+      )}
     </>
   );
 };
